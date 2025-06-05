@@ -1,12 +1,29 @@
 {{ define "main" }}
-<h1>{{ .Page.Title }}</h1>
 
-{{ if and (isset .Params "image") .Params.image }}
+<div class="photo-header">
+    <h1>{{ .Page.Title }}</h1>
+    <div class="photo-nav">
+        {{ if .NextInSection }}
+        <a class="prev" href="{{ .NextInSection.RelPermalink }}" title="Previous">&#8592;</a>
+        {{ else }}
+        <span class="prev disabled">&#8592;</span>
+        {{ end }}
+        {{ if .PrevInSection }}
+        <a class="next" href="{{ .PrevInSection.RelPermalink }}" title="Next">&#8594;</a>
+        {{ else }}
+        <span class="next disabled">&#8594;</span>
+        {{ end }}
+    </div>
+</div>
+
+{{ if and (isset .Params "image") .Params.image (or (not (isset .Params "showimage")) .Params.showimage) }}
     {{ $image := .Page.Resources.GetMatch .Params.image }}
-    {{ with $image }}
-        {{ $thumb := .Resize "1000x" }}
+    {{ if $image }}
+        {{ $thumb := $image.Resize "1000x q90" }}
         {{ printf `<img src="%s" alt="%s" class="img-responsive gallery-image">` $thumb.RelPermalink .Title | safeHTML }}
-    {{end}}
+    {{ else if (hasPrefix .Params.image "http") }}
+        <img src="{{ .Params.image }}" alt="{{ .Title }}" class="img-responsive gallery-image">
+    {{ end }}
 {{ end }}
 
 {{ .Content }}
