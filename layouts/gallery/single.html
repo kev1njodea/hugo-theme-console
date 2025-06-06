@@ -22,7 +22,11 @@
         {{ $thumb := $image.Resize "1000x q90" }}
         {{ printf `<img src="%s" alt="%s" class="img-responsive gallery-image">` $thumb.RelPermalink .Title | safeHTML }}
     {{ else if (hasPrefix .Params.image "http") }}
-        <img src="{{ .Params.image }}" alt="{{ .Title }}" class="img-responsive gallery-image">
+        {{ if hugo.IsProduction }}
+            <img src="/cdn-cgi/image/width=1000,quality=90/{{ .Params.image }}" alt="{{ .Title }}" class="img-responsive gallery-image">
+        {{ else }}
+            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="img-responsive gallery-image">
+        {{ end }}
     {{ end }}
 {{ end }}
 

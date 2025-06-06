@@ -36,7 +36,11 @@
                 {{ $thumb := $image.Resize "400x" }}
                 <img src="{{ $thumb.RelPermalink }}" alt="{{ .Title }}" class="img-responsive">
             {{ else if (hasPrefix .Params.image "http") }}
-                <img src="{{ .Params.image }}" alt="{{ .Title }}" class="img-responsive">
+                {{ if hugo.IsProduction }}
+                    <img src="/cdn-cgi/image/width=400,quality=80/{{ .Params.image }}" alt="{{ .Title }}" class="img-responsive">
+                {{ else }}
+                    <img src="{{ .Params.image }}" alt="{{ .Title }}" class="img-responsive">
+                {{ end }}
             {{ end }}
         </a>
     {{ end }}
