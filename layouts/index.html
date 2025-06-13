@@ -29,7 +29,7 @@
 
 <div class="image-grid">
     {{ $photos := where .Site.RegularPages "Section" "photos" }}
-    {{ range first 3 (sort $photos "Date" "desc") }}
+    {{ range first 3 (sort $photos "Slug" "desc") }}
         <a href="{{ .Permalink }}" title="{{ .Title }}">
             {{ $image := .Resources.GetMatch .Params.image }}
             {{ if $image }}
